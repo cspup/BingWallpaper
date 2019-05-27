@@ -6,7 +6,7 @@ public class Main {
         GetBingWallpaper getBingWallpaper=new GetBingWallpaper();
         try{
 
-            getBingWallpaper.get_wallpaper(0);
+            getBingWallpaper.get_wallpaper(0);//获取今日图片
         }
         catch (Exception e){
             throw e;
