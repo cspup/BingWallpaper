@@ -5,7 +5,6 @@
 # 自己写的网络api接口说明
 + 网址： http://api.wallpaper.yemuc.xyz/
 + 请求方式：GET
-+ 响应内容：json字符串 例：{"photo":[{"name":"20190501.jpg","url":"http://wallpaper.yemuc.xyz/20190501.jpg"},
-{"name":"20190502.jpg","url":"http://wallpaper.yemuc.xyz/20190502.jpg"}]} 
++ 响应内容：json字符串 例：{"num":2,"photo":[{"name":"20190501.jpg","url":"https://wallpaper.yemuc.xyz/20190501.jpg"},{"name":"20190502.jpg","url":"https://wallpaper.yemuc.xyz/20190502.jpg"}]}
 + 参数说明：day--要获取图片的起始日期 num--获取图片张数
 + 例：获取2019年5月1号之前的5张图片 http://api.wallpaper.yemuc.xyz/?day=20190501&num=5
