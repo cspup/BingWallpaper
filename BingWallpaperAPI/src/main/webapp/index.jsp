@@ -1,22 +1,17 @@
 <%@ page import="yemu.GetPhoto" %>
 <%@ page import="java.io.PrintWriter" %>
-<%@ page contentType="text/html;charset=UTF-8"  %>
-<html>
-<head>
-    <title>必应壁纸接口</title>
-</head>
-<body>
+<%@ page contentType="application/json;charset=UTF-8"  %>
+
 <%
+response.setHeader("Content-Type", "application/json;charset=UTF-8");
     try {
         String day = request.getParameter("day");
         int num = Integer.parseInt(request.getParameter("num"));
         PrintWriter printWriter = response.getWriter();
         GetPhoto getPhoto=new GetPhoto(day,num);
-        printWriter.println(getPhoto.getPhoto());
+        printWriter.print(getPhoto.getPhoto().toString());
+        printWriter.close();
     }catch (Exception e){
         response.getWriter().println("参数有误");
     }
-
-    %>
-</body>
-</html>
+%>

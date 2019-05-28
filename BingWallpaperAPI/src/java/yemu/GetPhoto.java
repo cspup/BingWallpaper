@@ -28,7 +28,7 @@ public class GetPhoto {
         }
     }
 
-    public String getPhoto(){
+    public JSONObject getPhoto(){
         JSONObject json=new JSONObject();
         SimpleDateFormat df=new SimpleDateFormat("yyyyMMdd");
         Date date;
@@ -46,13 +46,13 @@ public class GetPhoto {
                 JSONObject jsonObject=new JSONObject();
                 jsonObject.put("name",day+".jpg");
                 jsonObject.put("url",check(day+".jpg"));
-                jsonObject.put("null",null);
                 jsonObjects.add(jsonObject);
             }
             calendar.add(Calendar.DATE,1);
         }
         json.put("photo",jsonObjects);
-        return String.valueOf(json);
+        json.put("num",jsonObjects.size());
+        return json;
     }
 
     private String check(String photoname){//检查图片是否存在
