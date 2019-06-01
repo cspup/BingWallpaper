@@ -48,7 +48,8 @@ public class GetPhoto {
                 jsonObject.put("url",check(day+".jpg"));
                 jsonObjects.add(jsonObject);
             }
-            calendar.add(Calendar.DATE,1);
+
+            calendar.add(Calendar.DATE,-1);
         }
         json.put("photo",jsonObjects);
         json.put("num",jsonObjects.size());
