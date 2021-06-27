@@ -1,66 +1,77 @@
-import com.sun.xml.internal.bind.v2.util.ByteArrayOutputStreamEx;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-/*
-获取壁纸
+/**
+ * @author yemuc
+ * 获取壁纸
  */
 public class GetBingWallpaper {
-    private String file_path="";//文件路径默认为空
+    /**
+     * 文件路径
+     */
+    private String filePath ="";
 
-    public void setFile_path(String file_path) {//设置路径
-        this.file_path = file_path;
+    public void setFilePath(String filePath) {//设置路径
+        this.filePath = filePath;
     }
 
-    public String getFile_path() {
-        return file_path;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void get_wallpaper(int idx) throws Exception {//获取idx天前的图片，Bing接口支持7最近7天
-        String json=get_json(idx);
+    public void getWallpaper(int idx) throws Exception {//获取idx天前的图片，Bing接口支持7最近7天
+        String json=getJson(idx);
         if (json!=null){
 //            System.out.println(json);//显示返回数据
-            download_paper(get_down_url(json),get_file_name(json));
+            downloadPaper(getDownUrl(json),getFileName(json));
         }
         else{
             System.out.println("获取失败！");
         }
     }
-    public String get_json(int idx){//获取前idx天json
+
+    /**
+     * 获取前idx天json
+     * @param idx 天数
+     * @return json
+     */
+    public String getJson(int idx){
         try {
-            URL url = new URL("http://cn.bing.com/HPImageArchive.aspx?format=js&idx="+idx+"&n=1");//bing每日图片接口返回值是json，idx:今日之前天数
+            //bing每日图片接口返回值是json，idx:今日之前天数
+            URL url = new URL("http://cn.bing.com/HPImageArchive.aspx?format=js&idx="+idx+"&n=1");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(3000);
             conn.setRequestMethod("GET");
             InputStream inputStream = conn.getInputStream();
 
-            String json = "";
+            StringBuilder json = new StringBuilder();
             BufferedReader bf = new BufferedReader(new InputStreamReader(inputStream));
             String line;
-            while ((line = bf.readLine()) != null) {//一行一行的读返回的json
-                json += line;
+            while ((line = bf.readLine()) != null) {
+                json.append(line);
             }
             inputStream.close();
-            return json;
+            return json.toString();
         }
         catch (Exception e){
             e.printStackTrace();
         }
         return null;
     }
-    public void download_paper(URL url,String filename) {//下载图片
+    public void downloadPaper(URL url, String filename) {
         try {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();//建立连接
-            conn.setRequestMethod("GET");//GEt方式
-            conn.setConnectTimeout(1000);//设置超时
-            InputStream inputStream = conn.getInputStream();//输入流
+            //建立连接
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(1000);
+            InputStream inputStream = conn.getInputStream();
             byte[] data = readInputStream(inputStream);
-            File file = new File(filename);//建立图片
-            FileOutputStream outputStream = new FileOutputStream(file);//建立文件输出流
-            outputStream.write(data);//写入文件
-            outputStream.close();//关闭输出流
+            File file = new File(filename);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            outputStream.write(data);
+            outputStream.close();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -68,29 +79,38 @@ public class GetBingWallpaper {
     }
     private static byte[] readInputStream(InputStream inStream) throws Exception{//从输入流中读取图片
 
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStreamEx();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
-            int len = 0;
+            int len;
             while ((len = inStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, len);
             }
         return outputStream.toByteArray();
     }
-    public String get_file_name(String json){//获取文件名（以日期命名）
+    public String getFileName(String json){//获取文件名（以日期命名）
         String filename=json.substring(json.indexOf("enddate")+10,json.indexOf("enddate")+18);
-        return file_path+filename+".jpg";//返回设置的路径加文件名，如果没有设置路径保存到运行目录下
+        //返回设置的路径加文件名，如果没有设置路径保存到运行目录下
+        return filePath+filename+".jpg";
     }
-    public URL get_down_url(String json) throws MalformedURLException {//从获取到的json里获取图片url
-        String paper_link;
-        paper_link=json.substring(json.indexOf("url")+6,json.indexOf(".jpg")+4);//在json中找出url
-        if (paper_link.contains("https://")){//json中的地址可能有两种格式，这做了判断
-            paper_link=paper_link.replace("https","http");
-            URL down_link=new URL(paper_link);
-            return down_link;
+
+    /**
+     * 从获取到的json里获取图片url
+     * @param json json
+     * @return url
+     * @throws MalformedURLException MalformedURLException
+     */
+    public URL getDownUrl(String json) throws MalformedURLException {
+        String paperLink;
+        //在json中找出url
+        paperLink=json.substring(json.indexOf("url")+6,json.indexOf(".jpg")+4);
+        //json中的地址可能有两种格式
+        String https = "https://";
+        if (paperLink.contains(https)){
+            paperLink=paperLink.replace("https","http");
+            return new URL(paperLink);
         }
         else {
-            URL down_link = new URL("http://s.cn.bing.net" + paper_link);
-            return down_link;
+            return new URL("http://s.cn.bing.net" + paperLink);
         }
     }
 }
