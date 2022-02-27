@@ -1,13 +1,20 @@
+package com.csp.bingwallpaper.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 /**
  * @author yemuc
  * 获取壁纸
  */
 public class GetBingWallpaper {
+
+    Logger logger = LoggerFactory.getLogger(Logger.class);
     /**
      * 文件路径
      */
@@ -26,8 +33,10 @@ public class GetBingWallpaper {
         if (json!=null){
 //            System.out.println(json);//显示返回数据
             downloadPaper(getDownUrl(json),getFileName(json));
+            logger.info("下载成功！");
         }
         else{
+
             System.out.println("获取失败！");
         }
     }
@@ -77,7 +86,8 @@ public class GetBingWallpaper {
             e.printStackTrace();
         }
     }
-    private static byte[] readInputStream(InputStream inStream) throws Exception{//从输入流中读取图片
+    private static byte[] readInputStream(InputStream inStream) throws Exception{
+        //从输入流中读取图片
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
@@ -97,7 +107,6 @@ public class GetBingWallpaper {
      * 从获取到的json里获取图片url
      * @param json json
      * @return url
-     * @throws MalformedURLException MalformedURLException
      */
     public URL getDownUrl(String json) throws MalformedURLException {
         String paperLink;
