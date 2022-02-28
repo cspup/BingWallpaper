@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 /**
  * @author yemuc
@@ -33,7 +34,6 @@ public class GetBingWallpaper {
         if (json!=null){
 //            System.out.println(json);//显示返回数据
             downloadPaper(getDownUrl(json),getFileName(json));
-            logger.info("下载成功！");
         }
         else{
 
@@ -81,6 +81,8 @@ public class GetBingWallpaper {
             FileOutputStream outputStream = new FileOutputStream(file);
             outputStream.write(data);
             outputStream.close();
+            logger.info("下载成功！");
+            logger.info("保存为："+filename);
         }
         catch (Exception e){
             e.printStackTrace();

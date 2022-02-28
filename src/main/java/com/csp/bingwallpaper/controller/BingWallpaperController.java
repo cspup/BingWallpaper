@@ -1,6 +1,9 @@
 package com.csp.bingwallpaper.controller;
 
 import com.csp.bingwallpaper.Service.BingWallpaperService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +22,7 @@ public class BingWallpaperController {
         this.bingWallpaperService = bingWallpaperService;
     }
 
+    @Scheduled(cron = "0 0 2,3 1/1 * ? *")
     @RequestMapping(value = "/getWallpaperTask",method = RequestMethod.GET)
     @ResponseBody
     public void get(){
@@ -27,6 +31,12 @@ public class BingWallpaperController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping(value = "/getWallpaper",method = RequestMethod.GET)
+    @ResponseBody
+    public String get(String fileName){
+        return bingWallpaperService.getWallpaperUPath(fileName);
     }
 
 

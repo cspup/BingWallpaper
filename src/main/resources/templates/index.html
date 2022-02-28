@@ -9,11 +9,51 @@
     <script src="/static/js/axios.min.js"></script>
 </head>
 <body>
-    <div>
-
+    <div id="view">
+        <button onclick="lastDay()">上一张</button>
+        <button onclick="nextDay()">下一张</button>
+        <h1 id="date-view"></h1>
     </div>
 </body>
 <script>
+    let today = new Date();
+    window.onload = function (){
+        createImg();
+        updateImg(today);
+    }
+
+    function updateImg(date){
+        let year = date.getFullYear();
+        let month = date.getMonth();
+        let day = date.getDate();
+        if (day<10)
+            day="0"+day;
+        month++;
+        if (month<10){
+            month="0"+month;
+        }
+        let fileName = year + "" + month + "" + day + ".jpg";
+        document.getElementById("wallpaper").src = "/img/"+fileName;
+        document.getElementById("date-view").innerHTML = year + "年" + month + "月" + day + "日";
+    }
+
+    function createImg(){
+        let img = document.createElement("img");
+        img.id = "wallpaper";
+        img.src="";
+        img.alt="必应日图";
+        let view = document.getElementById("view");
+        view.appendChild(img);
+    }
+
+    function nextDay(){
+        today.setDate(today.getDate()+1);
+        updateImg(today);
+    }
+    function lastDay(){
+        today.setDate(today.getDate()-1);
+        updateImg(today);
+    }
 
 </script>
 
