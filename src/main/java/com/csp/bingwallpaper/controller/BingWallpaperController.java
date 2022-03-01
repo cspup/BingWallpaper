@@ -26,7 +26,7 @@ public class BingWallpaperController {
         this.bingWallpaperService = bingWallpaperService;
     }
 
-    @Scheduled(cron = "0 0 2,3 1/1 * ? *")
+    @Scheduled(cron = "0 0 2,3 1/1 * ?")
     @RequestMapping(value = "/getWallpaperTask",method = RequestMethod.GET)
     @ResponseBody
     public void get(){
